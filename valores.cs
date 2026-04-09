@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class valores : MonoBehaviour
 {
+    jugador jugador;
     apuesta apuesta;
     lista lista;
     valores valores;
@@ -39,15 +40,20 @@ public class valores : MonoBehaviour
             //si este se pasa de 22 pierde, si es igual a 22 gana, si el jugador decide parar y su valor total es menor o igual al del de la casa pierde, si el jugador decide parar y su valor total es mayor al de la casa gana
             if(valortotal >22){
             Print("perdiste");
+            jugador.decrementarMonedero(apuesta.getApuesta());
+
         }
         else if(valortotal==22){
             Print("ganaste");
+            jugador.incrementarMonedero(apuesta.getApuesta());
         }
         else if(parar==true && valortotal<=valores.valortotal()){
             Print("perdiste");
+            jugador.decrementarMonedero(apuesta.getApuesta());
         }
         else if(parar==true && valortotal>valores.valortotal()){
             Print("ganaste");
+            jugador.incrementarMonedero(apuesta.getApuesta());
         }
         }
         
