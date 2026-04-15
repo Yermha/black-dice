@@ -1,42 +1,93 @@
 using UnityEngine;
 
-public class apuesta : MonoBehaviour
+public class Apuesta : MonoBehaviour
 {
-    valorApuesta = 0;
-    jugador jugador;
-    parar=false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    int apuesta = 0;
+    int dinero = 100; // dinero inicial
+    bool partidaActiva = false;
 
+    // Obtener apuesta
+    public int GetApuesta()
+    {
+        return apuesta;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Obtener dinero
+    public int GetDinero()
     {
-        
+        return dinero;
     }
-    public int getApuesta(){
-        //aqui se obtiene la apuesta del jugador, se llama desde el boton de apostar
-        return valorApuesta;
+
+    // Incrementar apuesta
+    public void IncrementarApuesta(int valor)
+    {
+        if (partidaActiva) return;
+
+        if (dinero >= valor)
+        {
+            apuesta += valor;
+            dinero -= valor;
+            Debug.Log("Apuesta: " + apuesta + " | Dinero: " + dinero);
+        }
+        else
+        {
+            Debug.Log("❌ No tienes suficiente dinero");
+        }
     }
-    public void setApuesta(int valor){
-        //aqui se establece la apuesta del jugador, se llama desde el boton de apostar
-        valorApuesta = valor;
+
+    // Disminuir apuesta
+    public void DecrementarApuesta(int valor)
+    {
+        if (partidaActiva) return;
+
+        if (apuesta >= valor)
+        {
+            apuesta -= valor;
+            dinero += valor;
+            Debug.Log("Apuesta: " + apuesta + " | Dinero: " + dinero);
+        }
     }
-    public void incrementarApuesta(int valor){
-        //aqui se incrementa la apuesta del jugador, se llama desde el boton de incrementar apuesta
-        valorApuesta = valorApuesta + 10;
-        jugador.decrementarMonedero(10);
+
+    // Empezar partida
+    public void EmpezarPartida()
+    {
+        if (apuesta <= 0)
+        {
+            Debug.Log("⚠️ Debes apostar algo antes de jugar");
+            return;
+        }
+
+        partidaActiva = true;
+        Debug.Log("🎲 Partida iniciada con apuesta: " + apuesta);
     }
-    public void decrementarApuesta(int valor){
-        //aqui se decrementa la apuesta del jugador, se llama desde el boton de decrementar apuesta
-        valorApuesta = valorApuesta - 10;
-        jugador.incrementarMonedero(10);
+
+    // Ganar
+    public void Ganar()
+    {
+        dinero += apuesta * 2;
+        Debug.Log("🏆 Ganaste! Dinero: " + dinero);
+        Reiniciar();
     }
-    void empezarpartida(){
-        //aqui se empieza la partida, se llama desde el boton de empezar partida
-        parar=true;
-        apuesta.setApuesta(valorApuesta);
+
+    // Perder
+    public void Perder()
+    {
+        Debug.Log("😢 Perdiste. Dinero: " + dinero);
+        Reiniciar();
+    }
+
+    // Empate
+    public void Empatar()
+    {
+        dinero += apuesta;
+        Debug.Log("🤝 Empate. Dinero: " + dinero);
+        Reiniciar();
+    }
+
+    // Reset de ronda
+    void Reiniciar()
+    {
+        apuesta = 0;
+        partidaActiva = false;
     }
 }
